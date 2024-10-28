@@ -522,7 +522,7 @@ def GetConfigPath(appname='prometerp'):
         if appname[:1] != '.':
             appname = '.'+appname
     return os.path.join(confighome, appname)
-def GetConnection(ConnStr=None,Mandant=None):
+def GetConnection(ConnStr=None,connect_args=None,Mandant=None):
     if not ConnStr:
         if not Mandant:
             mc = 0
@@ -551,10 +551,11 @@ def GetConnection(ConnStr=None,Mandant=None):
         raise Exception('No Mandant Configuration found')
     try:
         if logging.root.level == logging.DEBUG:
-            engine = create_engine(ConnStr, echo=True)
+            engine = create_engine(ConnStr, echo=True, connect_args = connect_args)
         else:
-            engine = create_engine(ConnStr)
-        engine.convert_unicode = True
+            engine = create_engine(ConnStr, connect_args = connect_args)
+        #engine.convert_unicode = True
+        inspector = sqlalchemy.inspect(engine)
         Table.metadata.create_all(engine)
         if engine:
             Session = sessionmaker(bind=engine)
