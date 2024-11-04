@@ -4,7 +4,7 @@ import logging,warnings,sys,pathlib,os,sqlalchemy.ext.declarative,hashlib,sqlalc
 from typing import Text
 from sqlalchemy import Column, ForeignKey, Integer, BigInteger, String, func, update
 from sqlalchemy import create_engine
-from sqlalchemy.orm import relation, relationship, sessionmaker
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.sql.sqltypes import DateTime, Float
 import json,threading,urllib.parse,uuid
 Table = sqlalchemy.ext.declarative.declarative_base()
@@ -108,10 +108,10 @@ with warnings.catch_warnings():
         RefId = Column('REF_ID',Integer, ForeignKey('ORDERS.SQL_ID'))
         Type = Column("TYPE",String(3))
         Title = Column("TITLE",String(8))
-        Name = Column("NAME",String(200,convert_unicode=True))
+        Name = Column("NAME",String(200))
         CName = Column("CNAME",String(30))
-        Additional = Column("ADDITIONAL",String(200,convert_unicode=True))
-        Address = Column("ADDRESS",String(convert_unicode=True))
+        Additional = Column("ADDITIONAL",String(200))
+        Address = Column("ADDRESS",String())
         City = Column("CITY",String(30))
         Zip = Column("ZIP",String(8))
         State = Column("STATE",String(30))
@@ -125,8 +125,8 @@ with warnings.catch_warnings():
         RefId = Column('REF_ID',Integer, ForeignKey('ORDERPOS.SQL_ID'))
         Name = Column('NAME', String(20))
         Result = Column('RESULT', String(1))
-        Notes = Column('NOTES', String(convert_unicode=True))
-        RawData = Column('RAWDATA', String(convert_unicode=True))
+        Notes = Column('NOTES', String())
+        RawData = Column('RAWDATA', String())
         Testtime = Column('TESTTIME', DateTime)
         Testend = Column('TESTEND', DateTime)
         Serial = Column('SERIAL', String(30))
@@ -144,8 +144,8 @@ with warnings.catch_warnings():
         Version = Column("VERSION",String(25))
         Language = Column("LANGUAGE",String(3))
         TextType = Column("TEXTTYPE",String(1))
-        Shorttext = Column("SHORTTEXT",String(200,convert_unicode=True))
-        Text = Column("TEXT",String(convert_unicode=True))
+        Shorttext = Column("SHORTTEXT",String(200))
+        Text = Column("TEXT",String())
         Storage = Column("STORAGE",String(3))
         Serial = Column("SERIAL",String(20))
         Weight = Column("WEIGHT",Float)
@@ -216,7 +216,7 @@ with warnings.catch_warnings():
         Date = Column('DATE',DateTime)
         Number = Column('NUMBER',String(20))
         CustNo = Column('CUSTNO', String(20))
-        CustName = Column("CUSTNAME",String(200,convert_unicode=True))
+        CustName = Column("CUSTNAME",String(200))
         DateQuery = Column("DOAFQ",DateTime)
         DateWish = Column("DWISH",DateTime)
         DateApproved = Column("DAPPR",DateTime)
@@ -266,8 +266,8 @@ with warnings.catch_warnings():
         Version = Column("VERSION",String(25))
         Language = Column("LANGUAGE",String(3))
         TextType = Column("TEXTTYPE",String(1))
-        Shorttext = Column("SHORTTEXT",String(200,convert_unicode=True))
-        Text = Column("TEXT",String(convert_unicode=True))
+        Shorttext = Column("SHORTTEXT",String(200))
+        Text = Column("TEXT",String())
         Storage = Column("STORAGE",String(3))
         Serial = Column("SERIAL",String(20))
         Weight = Column("WEIGHT",Float)
@@ -318,9 +318,9 @@ with warnings.catch_warnings():
         OrigDate = Column('ODATE',DateTime)
         Number = Column('NUMBER',String(20))
         CustNo = Column('CUSTNO', String(20))
-        CustName = Column("CUSTNAME",String(200,convert_unicode=True))
+        CustName = Column("CUSTNAME",String(200))
         Currency = Column("CURRENCY",String(5))
-        Account=Column("ACCOUNT",String(200,convert_unicode=True))
+        Account=Column("ACCOUNT",String(200))
     class Masterdata(Table,BasicChangeableTable):
         __tablename__ = 'MASTERDATA'
         RELATIONSHIPS_TO_DICT = True
@@ -400,14 +400,14 @@ with warnings.catch_warnings():
         __tablename__ = 'BOILERPLATE'
         RELATIONSHIPS_TO_DICT = True
         id = Column('SQL_ID',BigInteger, primary_key=True)
-        Name=Column("NAME",String(100,convert_unicode=True),nullable=False)
-        Text=Column("TEXT",String(convert_unicode=True))
+        Name=Column("NAME",String(100),nullable=False)
+        Text=Column("TEXT",String())
     class DocPages(Table,TimestampTable):
         __tablename__ = 'DOCPAGES'
         RELATIONSHIPS_TO_DICT = True
         id = Column('SQL_ID',BigInteger, primary_key=True)
-        Name=Column("NAME",String(100,convert_unicode=True),nullable=False)
-        Tags=Column("TAGS",String(100,convert_unicode=True),nullable=False)
+        Name=Column("NAME",String(100),nullable=False)
+        Tags=Column("TAGS",String(100),nullable=False)
         OrigDate=Column("ORIGDATE",DateTime,nullable=False)
         Typ=Column("TYPE",String(1),nullable=False)
     class Documents(Table,TimestampTable):
@@ -418,56 +418,56 @@ with warnings.catch_warnings():
         Typ=Column("TYPE",String(1),nullable=False)
         IsDir=Column("ISDIR",String(1),nullable=False)
         IsLink=Column("ISLINK",String(1))
-        Name=Column("NAME",String(100,convert_unicode=True),nullable=False)
+        Name=Column("NAME",String(100),nullable=False)
         Parent = Column('PARENT',BigInteger)
         Number = Column('NUMBER',BigInteger,nullable=False)
-        Extension=Column("EXTENSION",String(20,convert_unicode=True))
-        Text=Column("FULLTEXT",String(convert_unicode=True))
+        Extension=Column("EXTENSION",String(20))
+        Text=Column("FULLTEXT",String())
         Document=Column("DOCUMENT",sqlalchemy.types.BLOB)
     class NumberRange(Table,BasicCreateableTable):
         __tablename__ = 'NUMBERRANGES'
         RELATIONSHIPS_TO_DICT = True
         id = Column('SQL_ID',BigInteger, primary_key=True)
-        Tablename=Column("TABLENAME",String(25,convert_unicode=True),nullable=False)#Numberset
-        Pool=Column("POOL",String(25,convert_unicode=True))#Numberpool
+        Tablename=Column("TABLENAME",String(25),nullable=False)#Numberset
+        Pool=Column("POOL",String(25))#Numberpool
         Start=Column("START",BigInteger,nullable=False)
         Stop=Column("STOP",BigInteger,nullable=False)
-        Use=Column("USE",String(200,convert_unicode=True))
-        Notice=Column("NOTICE",String(convert_unicode=True))
+        Use=Column("USE",String(200))
+        Notice=Column("NOTICE",String())
     class PasswordSave(Table,TimestampTable):
         __tablename__ = 'PWSAVE'
         RELATIONSHIPS_TO_DICT = True
         id = Column('SQL_ID',BigInteger, primary_key=True)
-        Name=Column("NAME",String(200,convert_unicode=True))
-        Site=Column("SITE",String(500,convert_unicode=True))
-        UserName=Column("USERNAME",String(400,convert_unicode=True))
-        Password=Column("PASSWORD",String(400,convert_unicode=True))
+        Name=Column("NAME",String(200))
+        Site=Column("SITE",String(500))
+        UserName=Column("USERNAME",String(400))
+        Password=Column("PASSWORD",String(400))
         Date=Column("DATE",DateTime)
     class AccountExchange(Table,TimestampTable):
         __tablename__ = 'ACCOUNTEXCHANGE'
         id = Column('SQL_ID',BigInteger, primary_key=True)
         ref_id = Column('REF_ID',BigInteger,ForeignKey('ACCOUNTS.SQL_ID'))
         Typ = Column('TYPE',String(1))
-        RemoteSortCode=Column("RSORTCODE",String(200,convert_unicode=True))
-        RemoteAccountno=Column("RACCOUNTNO",String(200,convert_unicode=True))
+        RemoteSortCode=Column("RSORTCODE",String(200))
+        RemoteAccountno=Column("RACCOUNTNO",String(200))
         Value = Column("VALUE",Float)
         Ballance = Column("BALLANCE",Float)
         Currency = Column("CURRENCY",String(5))
         Date=Column("DATE",DateTime)
         ValueDate=Column("VALUEDATE",DateTime)
-        Name=Column("NAME",String(200,convert_unicode=True))
-        Purpose=Column("PURPOSE",String(convert_unicode=True))
+        Name=Column("NAME",String(200))
+        Purpose=Column("PURPOSE",String())
         Checked = Column('CHECKED',String(1))
         Category = Column('CATEGORY',String(200))
     class Accounts(Table,TimestampTable):
         __tablename__ = 'ACCOUNTS'
         id = Column('SQL_ID',BigInteger, primary_key=True)
         Type = Column('TYPE',String(1))
-        Name=Column("NAME",String(200,convert_unicode=True))
-        SortCode=Column("SORTCODE",String(200,convert_unicode=True))
-        Accountno=Column("ACCOUNTNO",String(200,convert_unicode=True))
-        Notes=Column("NOTES",String(convert_unicode=True))
-        FTSName=Column("FTSNAME",String(convert_unicode=True))
+        Name=Column("NAME",String(200))
+        SortCode=Column("SORTCODE",String(200))
+        Accountno=Column("ACCOUNTNO",String(200))
+        Notes=Column("NOTES",String())
+        FTSName=Column("FTSNAME",String())
         Exchanges = relationship(AccountExchange, lazy='joined', order_by="AccountExchange.ValueDate")
     class MeasData(Table,TimestampTable):
         __tablename__ = 'MEASDATA'
@@ -479,15 +479,15 @@ with warnings.catch_warnings():
         __tablename__ = 'MEASUREMENTS'
         id = Column('SQL_ID',BigInteger, primary_key=True)
         ref_id = Column('REF_ID',BigInteger,ForeignKey('ALLOBJECTS.SQL_ID'))
-        Name=Column("NAME",String(200,convert_unicode=True))
+        Name=Column("NAME",String(200))
         Typ=Column("TYPE",String(1))
-        ID=Column("ID",String(200,convert_unicode=True))
+        ID=Column("ID",String(200))
         MeasData = relationship(MeasData, order_by="MeasData.TimestampD")
     class AllObjects(Table,TimestampTable):
         __tablename__ = 'ALLOBJECTS'
         id = Column('SQL_ID',BigInteger, primary_key=True)
         Number = Column('NUMBER',Integer)
-        Name=Column("NAME",String(200,convert_unicode=True))
+        Name=Column("NAME",String(200))
         #MatchCode=Column("MATCHCODE",String(100))
         Link=Column("LINK",String(240))
         Measurements = relationship(Measuremnents, order_by="Measuremnents.TimestampD")
@@ -496,7 +496,7 @@ with warnings.catch_warnings():
         __tablename__ = 'OBJECTS'
         id = Column('SQL_ID',BigInteger, primary_key=True)
         Number = Column('NUMBER',Integer)
-        Name=Column("NAME",String(200,convert_unicode=True))
+        Name=Column("NAME",String(200))
         MatchCode=Column("MATCHCODE",String(100))
         Link=Column("LINK",String(240))
     """
