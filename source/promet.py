@@ -554,9 +554,12 @@ def GetConnection(ConnStr=None,connect_args=None,Mandant=None):
             engine = create_engine(ConnStr, echo=True, connect_args = connect_args)
         else:
             engine = create_engine(ConnStr, connect_args = connect_args)
-        #engine.convert_unicode = True
+        engine.convert_unicode = True
         inspector = sqlalchemy.inspect(engine)
-        Table.metadata.create_all(engine)
+        try:
+            Table.metadata.create_all(engine)
+        except BaseException as e:
+            logging.warning(str(e))
         if engine:
             Session = sessionmaker(bind=engine)
             session = Session()
